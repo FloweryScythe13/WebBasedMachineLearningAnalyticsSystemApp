@@ -1,0 +1,71 @@
+html, body
+{
+    margin: 0;
+    padding: 0;
+}
+
+.FlexWrapper {
+    width: 100%;
+    display: flex;
+}
+
+.hpmenu {
+    width: 25%;
+    background-color: #03A66A;
+    display: inline-block;
+
+    font-family: Courier New, Courier, monospace;
+    color: black;
+    font-size: 10px;
+
+    align-items: center;
+    padding: 5px;
+    border: 0px;
+}
+
+.appsubmit {
+    width: 8em;
+    height: 4rm;
+    background-color: #F5F5DC;
+    font-size: 18px;
+}
+
+p, th, td {
+    text-align: center;
+}
+
+br {
+    text-align: center;
+    font-size: 12px;
+}
+
+.selmenu {
+    width: 100%;
+    background-color: white;
+    display: none;
+
+    font-family: Courier New, Courier, monospace;
+    color: black;
+    font-size: 10px;
+
+    align-items: center;
+    padding: 5px;
+    border: 0px;
+}
+
+.tableBodyScroll tbody {
+    display: block;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.tableBodyScroll thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.selected {
+    background-color: brown;
+    color: #FFF;
+}

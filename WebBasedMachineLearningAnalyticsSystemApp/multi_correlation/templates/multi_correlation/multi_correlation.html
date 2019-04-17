@@ -1,0 +1,107 @@
+﻿{% extends "multi_correlation/header.html" %}
+{% load static %}
+<!DOCTYPE html>
+{% block content %}
+
+
+<body>
+    <script>
+        var dataList = {{dataList | safe}};
+        var labels = {{labels | safe}};
+        var data_json = {{data_json | safe}};
+    </script>
+
+    <div class="FlexWrapper">
+        <div class="hpmenu">
+            <form action="?" method="post" enctype="multipart/form-data" style="display: inline;">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Data Loader</legend>
+                    {{form.as_ul}}
+                </fieldset>
+                <input type="submit" id="appsubmit" value="Submit" />
+            </form>
+        </div>
+
+        <div class="FlexWrapper-column" id="FlexWrapper-column">
+
+            <div class="selmenu" id="selmenu">
+                <br />
+                <p align="center">Statistics</p>
+                <table class="tableBodyScroll" id="statistics-parameter-table" align="center" style="width: 95%;" border="2px solid black" cellpadding="10px" cellspacing="1">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Median</th>
+                            <th>Mean</th>
+                            <th>Stdev</th>
+                            <th>Max</th>
+                            <th>Min</th>
+                            <th>Data Points</th>
+                            <th>P99</th>
+                            <th>P95</th>
+                            <th>P75</th>
+                            <th>P25</th>
+                            <th>P05</th>
+                            <th>P01</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for obj in datalist %}
+                        <tr>
+                            <td>{{ obj.parameter }} </td>
+                            <td>{{ obj.median | stringformat:".3E" }} </td>
+                            <td>{{ obj.mean | stringformat:".3E" }} </td>
+                            <td>{{ obj.stdev | stringformat:".3E" }} </td>
+                            <td>{{ obj.max | stringformat:".3E" }} </td>
+                            <td>{{ obj.min | stringformat:".3E" }} </td>
+                            <td>{{ obj.points }} </td>
+                            <td>{{ obj.P99 | stringformat:".3E" }}</td>
+                            <td>{{ obj.P95 | stringformat:".3E" }}</td>
+                            <td>{{ obj.P75 | stringformat:".3E" }}</td>
+                            <td>{{ obj.P25 | stringformat:".3E" }}</td>
+                            <td>{{ obj.P05 | stringformat:".3E" }}</td>
+                            <td>{{ obj.P01 | stringformat:".3E" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    
+                </table>
+                <br />
+
+                <div align="left">
+                    <label>Select Variables for Multiple Linear Regression : </label>
+                    <select multiple id="listX">
+                        {% for obj in labels %}
+                        <option> {{obj}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br />
+
+                <div align="left">
+                    <label>Target Variable (Y): </label>
+                    <select multiple id="listY">
+                        <option value="" disabled="disabled" selected="selected">Y-Parameter</option>
+                        {% for obj in labels %}
+                        <option> {{obj}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br />
+
+                <input type="button" id="execute_modeling" onclick="executeModelFunc()" value="Execute" />
+
+                <br />
+                <div id="chartdiv">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}
+

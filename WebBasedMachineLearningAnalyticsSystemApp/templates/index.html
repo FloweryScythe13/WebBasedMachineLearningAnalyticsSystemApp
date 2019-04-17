@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+{% load staticfiles %}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>Web-based Analytics App in Django</title>
+    
+</head>
+<style>
+    h2 {
+        background-color: #20B2AA;
+        color: #0000CD;
+        display: block;
+        font-size: 1.5em;
+        margin-top: 0em;
+        margin-bottom: 0em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+    }
+
+    .MenuWrap {
+        background-color: indigo;
+        font-family: Courier New, Courier, monospace;
+        font-size: 1rem;
+        min-height: 2.5rem;
+        display: flex;
+        align-items: center;
+        padding: 0 0rem;
+    }
+
+        .MenuWrap a:hover {
+            background-color: #663399;
+            color: lawngreen;
+        }
+
+    .FlexWrapper {
+        width: 100%;
+        display: flex;
+    }
+
+    .Left {
+        height: 90vh;
+        width: 15%;
+        background-color: #1E90FF;
+        display: inline-block;
+        font-family: Courier New, Courier, monospace;
+        color: #00FFFF;
+        font-size: 2rem;
+        align-items: center;
+        padding: 0px;
+        border: 0px;
+    }
+
+    .Middle {
+        height: 90vh;
+        width: 0%;
+        background-color: #1E90FF;
+        display: inline-block;
+        font-family: Courier New, Courier, monospace;
+        color: #ebebeb;
+        font-size: 2rem;
+        align-items: center;
+        padding: 0px;
+        border: 0px;
+    }
+
+    .Right {
+        height: 90vh;
+        width: 85%;
+        background-color: white;
+        display: inline-block;
+        align-items: center;
+        padding: 0px;
+        border: 0px;
+    }
+
+    .Footer {
+        min-height: 2.5rem;
+        width: 100%;
+        background-color: indigo;
+        padding: 0px;
+    }
+
+    .dropdown-content {
+        display: block;
+        position: relative;
+        background-color: #3CB371;
+        width: 100%;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        font-size: 16px;
+    }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+<body>
+    <h2 align="center">WEB-BASED MACHINE LEARNING ANALYTICS SYSTEM IN BIG-DATA - ERIC BAILEY IMPLEMENTATION</h2>
+
+    <div class="FlexWrapper">
+        <div class="Left">
+            <div class="dropdown">
+                <div id="appDropdown-DataModeling" class="dropdown-content">
+                    <a class="AppItem" onclick="updateiframe('/multi_correlation')">
+                        Correlation of Multiple Variables
+                    </a>
+                    <a class="AppItem" onclick="updateiframe('/ml_dnnreg')">Deep Neural Network: Regression</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="Right">
+            {% block body_block %}
+                <iframe id="iframe" src="" width="100%" height="100%"></iframe>
+            {% endblock %}
+        </div>
+        
+    </div>
+    <div class="Footer"></div>
+</body>
+
+<script>
+    var dropdowns;
+    function dmDropdownFunction() {
+        document.getElementById("appDropdown-DataModeling").classList.toggle("show");
+        dropdowns = document.getElementById("appDropdown-DataModeling");
+    }
+
+    function updateiframe(src) {
+        document.getElementById('iframe').src = src;
+    }
+</script>
+</html>
