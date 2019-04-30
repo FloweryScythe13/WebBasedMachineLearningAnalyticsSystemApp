@@ -1,0 +1,96 @@
+﻿{% extends "ml_dnnreg/header.html" %}
+{% load static %}
+<!DOCTYPE html>
+
+{% block content %}
+
+<body>
+    <script>
+        var MSE = {{MSE | safe}};
+        var predict_actual = {{predict_actual | safe}};
+        var regdata0 = {{regdata.polynomial.0 | safe}};
+        var regdata1 = {{regdata.polynomial.1 | safe}};
+    </script>
+
+    <div class="FlexWrapper">
+        <div class="hpmenu">
+            <form action="?" method="post" enctype="multipart/form-data" style="display: inline;">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Prediction Data Selection</legend>
+                    {{saved_model_form }}
+                </fieldset>
+                <br />
+                <input type="submit" id="appsubmit" value="Predict" />
+            </form>
+        </div>
+
+        <div class="appcontent_trainmodel" id="appcontent_trainmodel">
+            <h2>Model Prediction</h2>
+            <div id="trend_chart" style="height: 500px; width: 1260px; margin: 0 auto;"></div>
+
+            <br />
+
+            <p>Historical Scatter Plot: Model Prediction vs. Actual Labels</p>
+            <div id="chart_scatter" style="min-width: 600px; height: 600px; margin: 0 auto;"></div>
+            <p>Model Fitting Information</p>
+            <p>R<sup>2</sup> = {{regdata.R2 | stringformat:".3f"}}</p>
+            <br />
+            <p>Prediction Formula = {{regdata.polynomial.0 | stringformat:".3f"}} * X + 
+            {{regdata.polynomial.1 | stringformat:".3E"}}</p>
+            <br />
+            <br />
+
+            <p>Table: Prediction vs. Actual</p>
+            <table class="tableBodyScroll" id="prediction-table" width="95%" align="center"
+                   border="1" cellpadding="10px" cellspacing="1">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Prediction</th>
+                        <th>Actual</th>
+                        <th>Delta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in allobjects %}
+                        <tr>
+                            <td>{{obj.number}}</td>
+                            <td>{{obj.prediction | stringformat:".3f"}}</td>
+                            <td>{{obj.actual}}</td>
+                            <td>{{obj.delta | stringformat:".3f" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br />
+
+            <p>Prediction Table</p>
+            <table class="tableBodyScroll" id="prediction-table" width="95%" align="center"
+                   border="1" cellpadding="10px" cellspacing="1">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Prediction</th>                       
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in predictobjects %}
+                        <tr>
+                            <td>{{obj.number}}</td>
+                            <td>{{obj.prediction | stringformat:".3f"}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br />
+
+            <p>Deep Neural Network Configuration</p>
+            {% for obj in model_summary %}
+                <br />{{obj}}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+{% endblock %}

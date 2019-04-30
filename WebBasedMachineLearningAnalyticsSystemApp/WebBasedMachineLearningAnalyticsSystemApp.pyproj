@@ -37,7 +37,6 @@
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
-    <Compile Include="app_demo\admin.py" />
     <Compile Include="app_demo\apps.py" />
     <Compile Include="app_demo\migrations\__init__.py" />
     <Compile Include="app_demo\models.py" />
@@ -46,7 +45,6 @@
     <Compile Include="app_demo\views.py" />
     <Compile Include="app_demo\__init__.py" />
     <Compile Include="manage.py" />
-    <Compile Include="ml_dnnreg\admin.py" />
     <Compile Include="ml_dnnreg\apps.py" />
     <Compile Include="ml_dnnreg\forms.py">
       <SubType>Code</SubType>
@@ -57,9 +55,11 @@
     </Compile>
     <Compile Include="ml_dnnreg\models.py" />
     <Compile Include="ml_dnnreg\tests.py" />
+    <Compile Include="ml_dnnreg\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ml_dnnreg\views.py" />
     <Compile Include="ml_dnnreg\__init__.py" />
-    <Compile Include="multi_correlation\admin.py" />
     <Compile Include="multi_correlation\apps.py" />
     <Compile Include="multi_correlation\forms.py">
       <SubType>Code</SubType>
@@ -256,15 +256,22 @@
     <Folder Include="static\highcharts\gfx\" />
     <Folder Include="static\highcharts\gfx\stock-icons\" />
     <Folder Include="static\highcharts\graphics\" />
+    <Folder Include="static\ml_dnnreg\css\" />
+    <Folder Include="static\ml_dnnreg\js\" />
     <Folder Include="static\multi_correlation\" />
     <Folder Include="static\multi_correlation\js\" />
     <Folder Include="static\multi_correlation\css\" />
+    <Folder Include="static\ml_dnnreg\" />
     <Folder Include="templates\" />
     <Folder Include="WebBasedMachineLearningAnalyticsSystemApp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_demo\templates\app_demo\index.html" />
-    <Content Include="ml_dnnreg\templates\ml_dnnreg\index.html" />
+    <Content Include="ml_dnnreg\templates\ml_dnnreg\header.html" />
+    <Content Include="ml_dnnreg\templates\ml_dnnreg\home.html" />
+    <Content Include="ml_dnnreg\templates\ml_dnnreg\prediction.html" />
+    <Content Include="ml_dnnreg\templates\ml_dnnreg\repositoryreview.html" />
+    <Content Include="ml_dnnreg\templates\ml_dnnreg\trainmodel.html" />
     <Content Include="multi_correlation\templates\multi_correlation\header.html" />
     <Content Include="multi_correlation\templates\multi_correlation\index.html" />
     <Content Include="multi_correlation\templates\multi_correlation\multi_correlation.html" />
@@ -1040,6 +1047,9 @@
     <Content Include="static\highcharts\graphics\snow.png" />
     <Content Include="static\highcharts\graphics\sun.png" />
     <Content Include="static\highcharts\index.htm" />
+    <Content Include="static\ml_dnnreg\css\application.css" />
+    <Content Include="static\ml_dnnreg\js\plotly_line.js" />
+    <Content Include="static\ml_dnnreg\js\scatter.js" />
     <Content Include="static\multi_correlation\css\application.css" />
     <Content Include="static\multi_correlation\js\multi_correlation.js" />
     <Content Include="templates\index.html" />

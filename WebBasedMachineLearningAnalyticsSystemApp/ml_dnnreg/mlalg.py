@@ -4,8 +4,9 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense
 from keras import optimizers
+from ml_dnnreg.forms import HyperParamForm
 
-def dnn_reg(form):
+def dnn_reg(form: HyperParamForm):
     sampleCsvFile = form.cleaned_data['sampleCsvFile']
     validationSplit = form.cleaned_data['validationSplit']
     learningRate = form.cleaned_data['learningRate']
@@ -21,7 +22,7 @@ def dnn_reg(form):
     h1n2Activation = form.cleaned_data['h1n2Activation']
     normalization = form.cleaned_data['normalization']
 
-    dataframe = pd.read_csv(f"media/ml_dnnreg/{str(form.cleaned_data['sampleCsvFile']), header=None}")
+    dataframe = pd.read_csv(f"media/ml_dnnreg/{str(form.cleaned_data['sampleCsvFile'])}", header=None)
     dataset = dataframe.values
 
     Y = dataset[:, 0]
@@ -82,13 +83,13 @@ def dnn_reg(form):
     # Polynomial Regression
     def polyfit(x, y, degree):
         results = {}
-        coeffs = np.poly(x, y, degree)
+        coeffs = np.polyfit(x, y, degree)
 
         # Polynomial Coefficients
         results['polynomial'] = coeffs.tolist()
 
         # r-squared
-        p = np.poly1d(coecoeffs)
+        p = np.poly1d(coeffs)
 
         # fit the values, and find mean
         yhat = p(x)

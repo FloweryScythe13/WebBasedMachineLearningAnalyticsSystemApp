@@ -9,6 +9,7 @@ import django.contrib.auth.views
 from multi_correlation.views import index
 from django.conf.urls.static import static
 from multi_correlation import urls as multi_correlation_urls
+from ml_dnnreg import urls as ml_dnnreg_urls
 
 import app.forms
 import app.views
@@ -22,7 +23,7 @@ urlpatterns = [
     # Examples:
     url(r'^$', index),
     url('app_demo/', include('app_demo.urls')),
-    url(r'^ml_dnnreg/', include('ml_dnnreg.urls')),
+    url(r'^ml_dnnreg/', include(ml_dnnreg_urls)),
     url(r'^multi_correlation$', include(multi_correlation_urls)),
     url(r'^contact$', app.views.contact, name='contact'),
     url(r'^about$', app.views.about, name='about'),

@@ -1,0 +1,21 @@
+{% extends "ml_dnnreg/header.html" %}
+<!DOCTYPE html>
+    
+
+    {% block content %}
+
+    <div class="dropdown">
+        <button onclick="window.location = '/ml_dnnreg/trainmodel';" class="dropbtn">
+            Train Model
+        </button>
+        <button onclick="window.location = '/ml_dnnreg/repositoryreview';" class="dropbtn">
+            Repository Review
+        </button>
+        <button onclick="window.location = '/ml_dnnreg/prediction';" class="dropbtn">
+            Predict With Model
+        </button>
+        <br />
+    </div>
+
+
+    {% endblock %}
