@@ -10,6 +10,7 @@ from multi_correlation.views import index
 from django.conf.urls.static import static
 from multi_correlation import urls as multi_correlation_urls
 from ml_dnnreg import urls as ml_dnnreg_urls
+from data_model import urls as data_model_urls
 
 import app.forms
 import app.views
@@ -25,6 +26,7 @@ urlpatterns = [
     url('app_demo/', include('app_demo.urls')),
     url(r'^ml_dnnreg/', include(ml_dnnreg_urls)),
     url(r'^multi_correlation$', include(multi_correlation_urls)),
+    url(r'^data_model/', include(data_model_urls)),
     url(r'^contact$', app.views.contact, name='contact'),
     url(r'^about$', app.views.about, name='about'),
     #url(r'^login/$',

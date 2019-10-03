@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'ml_dnnreg',
     'multi_correlation',
+    'data_model',
     'app',
     'app_demo',
     # Add your apps here to enable them

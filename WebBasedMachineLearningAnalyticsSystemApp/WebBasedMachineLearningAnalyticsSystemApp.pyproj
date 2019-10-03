@@ -44,6 +44,19 @@
     <Compile Include="app_demo\urls.py" />
     <Compile Include="app_demo\views.py" />
     <Compile Include="app_demo\__init__.py" />
+    <Compile Include="data_model\admin.py" />
+    <Compile Include="data_model\apps.py" />
+    <Compile Include="data_model\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="data_model\migrations\__init__.py" />
+    <Compile Include="data_model\models.py" />
+    <Compile Include="data_model\tests.py" />
+    <Compile Include="data_model\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="data_model\views.py" />
+    <Compile Include="data_model\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="ml_dnnreg\apps.py" />
     <Compile Include="ml_dnnreg\forms.py">
@@ -89,6 +102,10 @@
     <Folder Include="app_demo\migrations\" />
     <Folder Include="app_demo\templates\" />
     <Folder Include="app_demo\templates\app_demo\" />
+    <Folder Include="data_model\" />
+    <Folder Include="data_model\migrations\" />
+    <Folder Include="data_model\templates\" />
+    <Folder Include="data_model\templates\data_model\" />
     <Folder Include="media\" />
     <Folder Include="ml_dnnreg\" />
     <Folder Include="ml_dnnreg\migrations\" />
@@ -102,6 +119,8 @@
     <Folder Include="static\common\" />
     <Folder Include="static\common\css\" />
     <Folder Include="static\common\js\" />
+    <Folder Include="static\data_model\css\" />
+    <Folder Include="static\data_model\js\" />
     <Folder Include="static\highcharts\" />
     <Folder Include="static\highcharts\code\" />
     <Folder Include="static\highcharts\code\css\" />
@@ -262,11 +281,15 @@
     <Folder Include="static\multi_correlation\js\" />
     <Folder Include="static\multi_correlation\css\" />
     <Folder Include="static\ml_dnnreg\" />
+    <Folder Include="static\data_model\" />
     <Folder Include="templates\" />
     <Folder Include="WebBasedMachineLearningAnalyticsSystemApp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_demo\templates\app_demo\index.html" />
+    <Content Include="data_model\templates\data_model\header.html" />
+    <Content Include="data_model\templates\data_model\home.html" />
+    <Content Include="data_model\templates\data_model\index.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\header.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\home.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\prediction.html" />
@@ -303,6 +326,7 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="static\data_model\js\model_scatter.js" />
     <Content Include="static\highcharts\code\css\annotations\popup.css" />
     <Content Include="static\highcharts\code\css\annotations\popup.scss" />
     <Content Include="static\highcharts\code\css\highcharts.css" />
