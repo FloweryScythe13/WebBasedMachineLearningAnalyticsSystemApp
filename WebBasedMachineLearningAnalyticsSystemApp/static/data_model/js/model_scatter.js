@@ -42,3 +42,109 @@ function linearRegression(y, x) {
 
     return lr;
 }
+
+function estimateCoefficientsWithOLS(xVector, yVector, order) {
+    var xMatrix = [],
+        xTransformed = [];
+    var yMatrix = numeric.transpose([yVector]);
+
+    for (j = 0; j < xVector.length; j++) {
+        xTransformed = [];
+        for (var k = 0; k <= order; k++) {
+            xTransformed.push(xVector[j] ** k);
+        }
+        xMatrix.push(xTransformed);
+    }
+    //Now that we have the transformed matrix for X, we find the vector of coefficients Beta 
+    //via the formula Beta = ((xMatrix^T) dot xMatrix)^-1 dot ((xMatrix^T) dot yMatrix).
+    var xMatrixT = numeric.transpose(xMatrix);
+    var dot1 = numeric.dot(xMatrixT, xMatrix);
+    var dotInv = numeric.inv(dot1);
+    var dotRHS = numeric.dot(xMatrixT, yMatrix);
+    var beta = numeric.dot(dotInv, dotRHS);
+
+    return beta;
+}
+
+function executeModelFunc() {
+    var dis1 = document.getElementById("selmenu");
+    dis1.style.display = "inline-block";
+    var e = document.getElementById("listX");
+    var parameterX = e.options[e.selectedIndex].value;
+    var f = $("#listY");
+    var parameterY = f.options[f.selectedIndex].value;
+    var data = [],
+        X = [],
+        Y = [];
+
+    //Extract the X & Y data columns selected by the user into the X and Y array variables
+    for (var i = 0; i < labels.length; i++) {
+        if (labels[i] === parameterX) {
+            X = dataList[i].datavec;
+        }
+        if (labels[i] === parameterY) {
+            Y = dataList[i].datavec;
+        }
+    }
+
+    var order = document.getElementsByName("order")[0].value;
+    var beta = estimateCoefficientsWithOLS(X, Y, order);
+
+    var predict_actual = [],
+        predict = [],
+        actual = [];
+    var formulaStr = "y = ";
+    //now we use the Beta coefficients to find the values of the y_model vector
+    for (i = 0; i < X.length; i++) {
+        var y_predict = 0;
+        for (j = 0; j <= order; j++) {
+            y_predict += beta[j] * (X[i] ** j);
+            if (i === 0) {
+                var newt = parseFloat(solution[j]).toExponential(2);
+                if (j === 0) {
+                    formulaStr += `(${newt.toString()})`;
+                }
+                else {
+                    formulaStr += ` + (${newt.toString()})*x^${j.toString()}`;
+                }
+            }
+        }
+        predict.push(y_predict);
+        actual.push(Y[i]);
+        predict_actual.push(y_predict, Y[i]);
+    }
+
+    /* It took me a while to figure out the reasoning behind this section below. It applies ordinary
+     * least squares estimation a second time to find the linear best-fit line between the predicted 
+     * and actual values. That line is what gets plotted to the user in the original code of the book
+     * (not including my own plot addition). It appears that the author needed/opted to do this because
+     * Highchart line series can only be drawn as straight lines between points. 
+     */
+    var evaluationBeta = estimateCoefficientsWithOLS(predict, actual, 1);
+
+    var data2 = [];
+    var maxX = 0,
+        minX = 0;
+    for (i = 0; i < predict_actual.length; i++) {
+        data2.push([parseFloat(predict_actual[i][0]), parseFloat(predict_actual[i][1])]);
+        if (i === 0) {
+            maxX = minX = parseFloat(predict_actual[i][0]);
+        }
+        else {
+            if (predict_actual[i][0] > maxX) {
+                maxX = predict_actual[i][0];
+            }
+            if (predict_actual[i][0] < minX) {
+                minX = predict_actual[i][0];
+            }
+        }
+    }
+
+    var minY = evaluationBeta[1] * minX + evaluationBeta[0];
+    var maxY = evaluationBeta[1] * maxX + evaluationBeta[0];
+    var lr = linearRegression(predict, actual);
+
+    formulaStr += "<br>";
+    formulaStr += `R2 = ${lr.r2.toFixed(3)}`;
+    $("#formula").html(formulaStr);
+}
