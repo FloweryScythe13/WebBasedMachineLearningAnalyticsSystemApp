@@ -11,19 +11,19 @@ def index(request):
 
 def polynomial(request):
 	print("polynomial was called")
-	if requestmethod == 'POST':
-		form = FileForm(request.POST, request.FlLES)
-		if form.is__valid() :
+	if request.method == 'POST':
+		form = FileForm(request.POST, request.FILES)
+		if form.is_valid() :
 			sampleCsvFile = form.cleaned_data['sampleCsvFile']
 			dataframe = pd.read_csv("media/" + str(form.cleaned_data['sampleCsvFile']))
 
-			dataset = datafmme.values
+			dataset = dataframe.values
 			labels = dataframe.columns.values.tolist()
 			data_json = dataframe.to_json()
 
 			dataList = []
 			factorList = []
-			label__num = []
+			label_num = []
 			labels_str = []
 
 			for i in range(0, dataset.shape[1]):
@@ -55,13 +55,13 @@ def polynomial(request):
 									"stdev": statistics.stdev(datavec),
 									"max": max,
 									"min": min,
-									"points" :len(datavec),
+									"points": len(datavec),
 									"P99": np.percentile(datavec, 99),
 									"P95": np.percentile(datavec, 95),
-									"P75": np.percenti1e(datavec, 75),
+									"P75": np.percentile(datavec, 75),
 									"P25": np.percentile(datavec, 25),
 									"P05": np.percentile(datavec, 5),
-									"P01": np.percenti1e(datavec, 1),
+									"P01": np.percentile(datavec, 1),
 									})
 				else:
 					labels_str.append(labels[i])
@@ -76,7 +76,7 @@ def polynomial(request):
 					'datajson': data_json,
 					'dataset': dataset,
 					'labels_all': labels,
-					'labels': label__num,
+					'labels': label_num,
 					'labels_str': labels_str,
 					'range': range(dataset.shape[1])
 					})
@@ -93,7 +93,7 @@ def exponential(request):
 	if request.method == 'POST':
 		form = FileForm(request.POST, request.FILES)
 
-		if form.is__valid() :
+		if form.is_valid():
 			sampleCsvFile = form.cleaned_data['sampleCsvFile']
 			dataframe = pd.read_csv("media/" + str(form.cleaned_data['sampleCsvFile']))
 

@@ -1,0 +1,95 @@
+﻿{% extends "data_model/header.html" %}
+{% load static %}
+<!DOCTYPE html>
+{% block content %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<body>
+    <div class="FlexWrapper">
+        <div class="hpmenu">
+            <form action="?" method="post" enctype="multipart/form-data" style="display:inline;">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Data Loader</legend>
+                    {{form.as_ul}}
+                </fieldset>
+                <input type="submit" id="appsubmit" value="Submit" />
+            </form>
+        </div>
+
+        <div class="appcontent_trainmodel" id="appcontent_trainmodel">
+            <p>Data Table</p>
+            <table class="tableBodyScroll" id="data-table" align="center" border="2px solid black" cellpadding="10px" cellspacing="1">
+                <thead>
+                    <tr>
+                        {% for obj in labels_all %}
+                        <td>{{ obj }}</td>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in dataset %}
+                    <tr>
+                        {% for r in obj %}
+                        {% if r >= 0 or r < 0 %}
+                        <td>{{r|stringformat:".3E"}}</td>
+                        {% else %}
+                        <td>{{r}}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <br />
+            <div align="left">
+                <label>Input Variable (X) :</label>
+                <select id="listX">
+                    <option value="" disabled="disabled" selected="selected">Please Select X-Parameter</option>
+                    {% for obj in labels %}
+                    <option>{{obj}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br />
+            <div align="left">
+                <label>Modeling Variable (Y) :</label>
+                <select id="listY">
+                    <option value="" disabled="disabled" selected="selected">Please Select Y-Parameter</option>
+                    {% for obj in labels %}
+                    <option>{{obj}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br />
+            <label>Polynomial Order: </label>
+            <input type="number" name="order" list="ordername" align="center" />
+            <datalist id="ordername">
+                {% with ""|center:9 as range %}
+                {% for i in range %}
+                <option value="{{forloop.counter}}"></option>
+                {% endfor %}
+                {% endwith %}
+            </datalist>
+            <br />
+            <input type="button" id="execute_modeling" onclick="executeModelFunc()" value="Execute" />
+
+            <br />
+            <div class="selmenu" id="selmenu">
+                <p>Polynomial Fitting Formula</p>
+                <label id="formula"></label>
+
+                <br />
+                <div id="model_scatter"></div>
+                <br />
+                <div id="model_metrics"></div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>

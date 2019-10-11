@@ -290,6 +290,7 @@
     <Content Include="data_model\templates\data_model\header.html" />
     <Content Include="data_model\templates\data_model\home.html" />
     <Content Include="data_model\templates\data_model\index.html" />
+    <Content Include="data_model\templates\data_model\polynomial.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\header.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\home.html" />
     <Content Include="ml_dnnreg\templates\ml_dnnreg\prediction.html" />
