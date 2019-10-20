@@ -5,12 +5,6 @@
 {% block content %}
 
 <body>
-    <script>
-        var MSE = {{MSE | safe}};
-        var predict_actual = {{predict_actual | safe}};
-        var regdata0 = {{regdata.polynomial.0 | safe}};
-        var regdata1 = {{regdata.polynomial.1 | safe}};
-    </script>
 
     <div class="FlexWrapper">
         <div class="hpmenu">
@@ -71,6 +65,11 @@
             {% endfor %}
         </div>
     </div>
+
+    {{MSE | json_script:"MSE" }}
+    {{predict_actual | json_script: "predict_actual" }}
+    {{regdata0 |json_script: "regdata0" }}
+    {{regdata1 | json_script: "regdata1" }}
 </body>
 
 {% endblock %}

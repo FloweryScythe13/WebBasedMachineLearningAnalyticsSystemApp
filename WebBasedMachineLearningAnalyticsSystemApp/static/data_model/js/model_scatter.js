@@ -241,6 +241,12 @@ $(document).ready(function () {
     }
 
     function executeModelFuncExponential() {
-
+        var dis1 = document.getElementById("selmenu");
+        dis1.style.display = "inline-block";
+        var e = document.getElementById("listX");
+        var parameterX = e.options[e.selectedIndex].value;
+        var f = $("#listY");
+        var parameterY = f.options[f.selectedIndex].value;
+        var X = [];
     }
 })

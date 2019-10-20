@@ -328,6 +328,7 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="static\data_model\css\application.css" />
     <Content Include="static\data_model\js\model_scatter.js" />
     <Content Include="static\highcharts\code\css\annotations\popup.css" />
     <Content Include="static\highcharts\code\css\annotations\popup.scss" />
