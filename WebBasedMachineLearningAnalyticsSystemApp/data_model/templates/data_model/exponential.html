@@ -66,33 +66,23 @@
             </div>
 
             <br />
-            <label>Polynomial Order: </label>
-            <input type="number" name="order" list="ordername" align="center" />
-            <datalist id="ordername">
-                {% with ""|center:9 as range %}
-                {% for i in range %}
-                <option value="{{forloop.counter}}"></option>
-                {% endfor %}
-                {% endwith %}
-            </datalist>
-            <br />
-            <input type="button" id="execute_modeling" onclick="executeModelFunc()" value="Execute" />
+            <input type="button" id="execute_modeling" onclick="executeModelFuncExponential()" value="Execute" />
 
             <br />
             <div class="selmenu" id="selmenu">
-                <p>Polynomial Fitting Formula</p>
+                <p>Exponential Fitting Formula</p>
                 <label id="formula"></label>
 
                 <br />
-                <div id="model_scatter"></div>
+                <div id="model_scatter_exponential"></div>
                 <br />
-                <div id="model_metrics"></div>
+                <div id="model_metrics_exponential"></div>
             </div>
         </div>
     </div>
-    {{data_json | json_script:"data_json" }}
-    {{dataList | json_script: "dataList" }}
-    {{labels | json_script: "labels" }}
+    {{ data_json|json_script:"data_json" }}
+    {{ dataList|json_script:"dataList" }}
+    {{ labels | json_script:"labels" }}
     {{labels_all | json_script: "labels_all" }}
 </body>
 {% endblock %}

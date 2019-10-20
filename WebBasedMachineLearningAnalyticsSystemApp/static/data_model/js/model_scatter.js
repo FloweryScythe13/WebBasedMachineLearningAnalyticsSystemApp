@@ -1,6 +1,11 @@
 import Highcharts from "../../highcharts/code/es-modules/parts/Globals";
 
 $(document).ready(function () {
+    var data_json = JSON.parse(document.getElementById("data_json").textContent);
+    var dataList = JSON.parse(document.getElementById("dataList").textContent);
+    var labels = JSON.parse(document.getElementById("labels").textContent);
+    var labels_all = JSON.parse(document.getElementById("labels_all").textContent);
+
     if (Object.keys(data_json).length > 0) {
         var dis = document.getElementById("appcontent_trainmodel");
         dis.style.display = "block";
@@ -152,6 +157,90 @@ $(document).ready(function () {
         $("#formula").html(formulaStr);
 
 
-        Highcharts.chart('')
+        Highcharts.chart('model_scatter', {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Data Plot'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'X'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Y'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF",
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100, 100, 100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{series.name}</b>',
+                        pointFormat: '{point.x}, {point.y}'
+                    }
+                }
+            },
+            series: [
+                {
+                    type: 'line',
+                    name: 'Regression Accuracy Line',
+                    data: [[minX, minY], [maxX, maxY]],
+                    marker: {
+                        enabled: false
+                    },
+                    states: {
+                        hover: {
+                            lineWidth: 0
+                        }
+                    },
+                    enableMouseTracking: false
+                },
+                {
+                    type: 'scatter',
+                    name: 'Modeling',
+                    color: "rgba(223, 83, 83, 0.5)",
+                    data: data,
+                    marker: {
+                        radius: 4
+                    }
+                }]
+        });
+    }
+
+    function executeModelFuncExponential() {
+
     }
 })

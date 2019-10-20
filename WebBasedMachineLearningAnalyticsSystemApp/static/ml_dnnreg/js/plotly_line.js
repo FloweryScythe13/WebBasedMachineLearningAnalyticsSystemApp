@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var MSE = JSON.parse(document.getElementById("MSE").textContent);
     var xData = [];
     var yData = [];
     for (var i = 0; i < MSE.length; i++) {

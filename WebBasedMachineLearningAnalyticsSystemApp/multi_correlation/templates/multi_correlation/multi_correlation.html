@@ -4,12 +4,7 @@
 {% block content %}
 
 
-<body>
-    <script>
-        var dataList = {{dataList | safe}};
-        var labels = {{labels | safe}};
-        var data_json = {{data_json | safe}};
-    </script>
+<body>    
 
     <div class="FlexWrapper">
         <div class="hpmenu">
@@ -101,6 +96,9 @@
             </div>
         </div>
     </div>
+    {{data_json | json_script:"data_json" }}
+    {{dataList | json_script: "dataList" }}
+    {{labels | json_script: "labels" }}
 </body>
 
 {% endblock %}

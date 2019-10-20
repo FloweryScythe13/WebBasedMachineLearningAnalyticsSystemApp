@@ -1,4 +1,9 @@
 $(document).ready(function () {
+
+    var predict_actual = JSON.parse(document.getElementById("predict_actual").textContent);
+    var regdata0 = JSON.parse(document.getElementById("regdata0").textContent);
+    var regdata1 = JSON.parse(document.getElementById("regdata1").textContent);
+
     var data = [];
     var maxX = 0;
     var minX = 0;

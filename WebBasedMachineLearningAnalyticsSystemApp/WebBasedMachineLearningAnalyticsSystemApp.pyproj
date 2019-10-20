@@ -287,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_demo\templates\app_demo\index.html" />
+    <Content Include="data_model\templates\data_model\exponential.html" />
     <Content Include="data_model\templates\data_model\header.html" />
     <Content Include="data_model\templates\data_model\home.html" />
     <Content Include="data_model\templates\data_model\index.html" />
