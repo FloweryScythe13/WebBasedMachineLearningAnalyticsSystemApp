@@ -240,6 +240,12 @@ $(document).ready(function () {
         });
     }
 
+    //The method that King used involves taking the natural log of the equation Y(t) = exp(Beta*X(t)) and writing 
+    //the Y-parameter column into the variable for that transformed Y, and then applying the above 
+    //ordinary least squares estimation technique to the resulting linear equation to find the 
+    //coefficients. However, we are going to be different and use French mathematician J. Jacquelin's 
+    //method instead, pulled from his paper "Régressions et équations intégrales" (2014). Refer to 
+    //https://math.stackexchange.com/questions/350754/fitting-exponential-curve-to-data for more information.
     function executeModelFuncExponential() {
         var dis1 = document.getElementById("selmenu");
         dis1.style.display = "inline-block";
@@ -247,6 +253,58 @@ $(document).ready(function () {
         var parameterX = e.options[e.selectedIndex].value;
         var f = $("#listY");
         var parameterY = f.options[f.selectedIndex].value;
-        var X = [];
+        let X = [],
+            Y = [],
+            points = [];
+
+        //Extract the X & Y data columns selected by the user into the X and Y array variables
+        for (var i = 0; i < labels.length; i++) {
+            if (labels[i] === parameterX) {
+                X = dataList[i].datavec;
+            }
+            if (labels[i] === parameterY) {
+                Y = dataList[i].datavec;
+            }
+        }
+
+        for (var j = 0; j < X.length; j++) {
+            points.push(new { x: X[j], y: Y[j]});
+        }
+        points = points.sort((a, b) => a - b);
+
+        var S = [];
+        var sumXSquared = 0,
+            sumX_S = 0,
+            sumSSquared = 0,
+            sumYX = 0,
+            sumY_S = 0;
+        for (var k = 0; k < points.length; k++) {
+            if (k === 0)
+                S.push(0);
+            else {
+                S.push(S[k - 1] + 0.5 * (points[k].y + points[k - 1].y) * (points[k].x - points[k - 1].x));
+                sumXSquared += (points[k].x - points[0].x) ** 2;
+                sumX_S += (points[k].x - points[0].x) * S[k];
+                sumSSquared += S[k] ** 2;
+                sumYX += (points[k].y - points[0].y) * (points[k].x - points[0].x);
+                sumY_S += (points[k].y - points[0].y) * S[k];
+            }
+        }
+
+        var momentMatrix1 = [
+            [sumXSquared, sumX_S],
+            [sumX_S, sumSSquared]
+        ];
+        momentMatrix1 = numeric.inv(momentMatrix1);
+        var momentMatrix2 = [
+            sumYX,
+            sumY_S
+        ];
+        var Beta_initial = numeric.dot(momentMatrix1, momentMatrix2);
+
+
+
+
+
     }
 })
