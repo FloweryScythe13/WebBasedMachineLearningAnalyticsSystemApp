@@ -268,7 +268,7 @@ $(document).ready(function () {
         }
 
         for (var j = 0; j < X.length; j++) {
-            points.push(new { x: X[j], y: Y[j]});
+            points.push(new { x: X[j], y: Y[j] });
         }
         points = points.sort((a, b) => a - b);
 
@@ -301,10 +301,153 @@ $(document).ready(function () {
             sumY_S
         ];
         var Beta_initial = numeric.dot(momentMatrix1, momentMatrix2);
+        var c2 = Beta_initial[1];
+        var thetas = [];
+        var sumTheta = 0,
+            sumThetaSquared = 0,
+            sumY = 0,
+            sumYTheta = 0;
+        for (var l = 0; l < points.length; l++) {
+            var theta_l = Math.exp(c2 * points[l].x);
+            thetas.push(theta_l);
+            sumTheta += theta_l;
+            sumThetaSquared += theta_l ** 2;
+            sumY += points[l].y;
+            sumYTheta += points[l].y * theta_l;
+        }
+        var leftMomentMatrix2 = new math.matrix([
+            [points.length, sumTheta],
+            [sumTheta, sumThetaSquared]
+        ]);
+        leftMomentMatrix2 = math.inv(leftMomentMatrix2);
+        var rightMomentMatrix2 = math.matrix([sumY, sumYTheta]);
+        var Beta_solution = math.dot(leftMomentMatrix2, rightMomentMatrix2);
+        var a2 = Beta_solution[0];
+        var b2 = Beta_solution[1];
 
+        var formulaStr = "y = ";
+        var predict_actual = [],
+            predict = [],
+            actual = [];
 
+        //now we use the Beta coefficients to find the values of the y_model vector
+        for (i = 0; i < X.length; i++) {
+            var y_predict = a2 + b2 * Math.exp(c2 * X[i]);
+            formulaStr += `${a2.toExponential(2).toString()} + ${b2.toExponential(2)}*exp(${c2.toExponential(2)}*x)`;
 
+            predict.push(y_predict);
+            actual.push(Y[i]);
+            predict_actual.push(y_predict, Y[i]);
+        }
 
+        var evaluationBeta = estimateCoefficientsWithOLS(predict, actual, 1);
 
+        var data2 = [];
+        var maxX = 0,
+            minX = 0;
+        for (i = 0; i < predict_actual.length; i++) {
+            data2.push([parseFloat(predict_actual[i][0]), parseFloat(predict_actual[i][1])]);
+            if (i === 0) {
+                maxX = minX = parseFloat(predict_actual[i][0]);
+            }
+            else {
+                if (predict_actual[i][0] > maxX) {
+                    maxX = predict_actual[i][0];
+                }
+                if (predict_actual[i][0] < minX) {
+                    minX = predict_actual[i][0];
+                }
+            }
+        }
+
+        var minY = evaluationBeta[1] * minX + evaluationBeta[0];
+        var maxY = evaluationBeta[1] * maxX + evaluationBeta[0];
+        var lr = linearRegression(predict, actual);
+
+        formulaStr += "<br>";
+        formulaStr += `R2 = ${lr.r2.toFixed(3)}`;
+        $("#formula").html(formulaStr);
+
+        Highcharts.chart("model_scatter_exponential", {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Data Plot'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'X'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Y'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF",
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100, 100, 100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{series.name}</b>',
+                        pointFormat: '{point.x}, {point.y}'
+                    }
+                }
+            },
+            series: [
+                {
+                    type: 'line',
+                    name: 'Regression Accuracy Line',
+                    data: [[minX, minY], [maxX, maxY]],
+                    marker: {
+                        enabled: false
+                    },
+                    states: {
+                        hover: {
+                            lineWidth: 0
+                        }
+                    },
+                    enableMouseTracking: false
+                },
+                {
+                    type: 'scatter',
+                    name: 'Modeling',
+                    color: "rgba(223, 83, 83, 0.5)",
+                    data: data2,
+                    marker: {
+                        radius: 4
+                    }
+                }]
+        });
     }
-})
+});
