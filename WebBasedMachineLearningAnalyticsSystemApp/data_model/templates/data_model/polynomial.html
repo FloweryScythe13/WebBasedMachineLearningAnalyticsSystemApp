@@ -90,10 +90,10 @@
             </div>
         </div>
     </div>
-    {{data_json | json_script:"data_json" }}
-    {{dataList | json_script: "dataList" }}
-    {{labels | json_script: "labels" }}
-    {{labels_all | json_script: "labels_all" }}
+    {{data_json |default:""|json_script:"data_json" }}
+    {{dataList | default:"" | json_script:"dataList" }}
+    {{labels | default:"" | json_script:"labels" }}
+    {{labels_all | default:"" | json_script:"labels_all" }}
 </body>
 {% endblock %}
 </html>

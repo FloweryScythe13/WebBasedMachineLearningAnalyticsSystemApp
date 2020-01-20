@@ -65,7 +65,7 @@ def polynomial(request):
 									})
 				else:
 					labels_str.append(labels[i])
-					datavec == []
+					datavec = []
 					for j in range(0, dataset.shape[0]):
 						datavec.append(dataset[j][i]); 
 					factorList.append({"parameter": labels[i], "datavec": datavec})
@@ -73,7 +73,7 @@ def polynomial(request):
 					{'form':form,
 					'dataList': dataList,
 					'factorList': factorList,
-					'datajson': data_json,
+					'data_json': data_json,
 					'dataset': dataset,
 					'labels_all': labels,
 					'labels': label_num,
@@ -104,12 +104,12 @@ def exponential(request):
 
 			dataList = []
 			factorList = []
-			label_num = []
-			labels.str = []
+			labels_num = []
+			labels_str = []
 
 			for i in range(0, dataset.shape[1]): 
 				if (not isinstance(dataset[0][i], str)):
-					label_num.append(labels[i])
+					labels_num.append(labels[i])
 					sitenum = 0
 					max, min = 0, 0
 
@@ -152,9 +152,9 @@ def exponential(request):
 					factorList.append({"parameter": labels[i], "datavec": datavec})
 			return render(request, 'data_model/exponential.html',
 							{'form':form,
-							'dataList': dataLlst,
+							'dataList': dataList,
 							'factorList': factorList,
-							'datajson': datajson,
+							'data_json': data_json,
 							'dataset': dataset,
 							'labels_all': labels,
 							'labels': labels_num,

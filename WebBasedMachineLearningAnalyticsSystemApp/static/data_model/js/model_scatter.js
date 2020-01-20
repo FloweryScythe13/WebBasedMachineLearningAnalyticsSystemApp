@@ -1,12 +1,23 @@
-import Highcharts from "../../highcharts/code/es-modules/parts/Globals";
+//$(document).ready(function () {
+    //WHY DOES JAVASCRIPT NOT HAVE A FEATURE FOR CHECKING NULL REFERENCES FOR OBJECT PROPERTIES LIKE C# DOES, WHYYYYYYY
+    var data_json = document.getElementById("data_json");
+    var dataList = document.getElementById("dataList");
+    var labels = document.getElementById("labels");
+    var labels_all = document.getElementById("labels_all");
+    if (!!data_json) {
+        data_json = JSON.parse(data_json.textContent);
+    }
+    if (!!dataList) {
+        dataList = JSON.parse(dataList.textContent);
+    }
+    if (!!labels) {
+        labels = JSON.parse(labels.textContent);
+    }
+    if (!!labels_all) {
+        labels_all = JSON.parse(labels_all.textContent);
+    }
 
-$(document).ready(function () {
-    var data_json = JSON.parse(document.getElementById("data_json").textContent);
-    var dataList = JSON.parse(document.getElementById("dataList").textContent);
-    var labels = JSON.parse(document.getElementById("labels").textContent);
-    var labels_all = JSON.parse(document.getElementById("labels_all").textContent);
-
-    if (Object.keys(data_json).length > 0) {
+    if (Object.keys(data_json || {}).length > 0) {
         var dis = document.getElementById("appcontent_trainmodel");
         dis.style.display = "block";
     }
@@ -34,11 +45,11 @@ $(document).ready(function () {
             (sumSet, elem, i) => {
                 return {
                     ...sumSet,
-                    sum_x: (sumSet[sum_x] || 0) + elem[0],
-                    sum_y: (sumSet[sum_y] || 0) + elem[1],
-                    sum_xy: (sumSet[sum_xy] || 0) + elem[0] * elem[1],
-                    sum_xx: (sumSet[sum_xx] || 0) + elem[0] ** 2,
-                    sum_yy: (sumSet[sum_yy] || 0) + elem[1] ** 2
+                    sum_x: (sumSet.sum_x || 0) + elem[0],
+                    sum_y: (sumSet.sum_y || 0) + elem[1],
+                    sum_xy: (sumSet.sum_xy || 0) + elem[0] * elem[1],
+                    sum_xx: (sumSet.sum_xx || 0) + elem[0] ** 2,
+                    sum_yy: (sumSet.sum_yy || 0) + elem[1] ** 2
                 };
             }, {}
         );
@@ -79,7 +90,7 @@ $(document).ready(function () {
         dis1.style.display = "inline-block";
         var e = document.getElementById("listX");
         var parameterX = e.options[e.selectedIndex].value;
-        var f = $("#listY");
+        var f = document.getElementById("listY");
         var parameterY = f.options[f.selectedIndex].value;
         var data = [],
             X = [],
@@ -108,7 +119,7 @@ $(document).ready(function () {
             for (j = 0; j <= order; j++) {
                 y_predict += beta[j] * (X[i] ** j);
                 if (i === 0) {
-                    var newt = parseFloat(solution[j]).toExponential(2);
+                    var newt = parseFloat(beta[j]).toExponential(2);
                     if (j === 0) {
                         formulaStr += `(${newt.toString()})`;
                     }
@@ -119,7 +130,7 @@ $(document).ready(function () {
             }
             predict.push(y_predict);
             actual.push(Y[i]);
-            predict_actual.push(y_predict, Y[i]);
+            predict_actual.push([y_predict, Y[i]]);
         }
 
         /* It took me a while to figure out the reasoning behind this section below. It applies ordinary
@@ -147,9 +158,9 @@ $(document).ready(function () {
                 }
             }
         }
-
-        var minY = evaluationBeta[1] * minX + evaluationBeta[0];
-        var maxY = evaluationBeta[1] * maxX + evaluationBeta[0];
+        //need to wrap these in Number because I am finding that when one term is large or small enough to be in scientific notation, the e character seems to be resulting in creation of a string variable, not numeric.
+        var minY = Number(evaluationBeta[1] * minX) + Number(evaluationBeta[0]);
+        var maxY = Number(evaluationBeta[1] * maxX) + Number(evaluationBeta[0]);
         var lr = linearRegression(predict, actual);
 
         formulaStr += "<br>";
@@ -251,10 +262,11 @@ $(document).ready(function () {
         dis1.style.display = "inline-block";
         var e = document.getElementById("listX");
         var parameterX = e.options[e.selectedIndex].value;
-        var f = $("#listY");
+        var f = document.getElementById("listY");
         var parameterY = f.options[f.selectedIndex].value;
         let X = [],
             Y = [],
+            data = [],
             points = [];
 
         //Extract the X & Y data columns selected by the user into the X and Y array variables
@@ -268,7 +280,8 @@ $(document).ready(function () {
         }
 
         for (var j = 0; j < X.length; j++) {
-            points.push(new { x: X[j], y: Y[j] });
+            points.push({ x: X[j], y: Y[j] });
+            data.push([X[j], Y[j]]);
         }
         points = points.sort((a, b) => a - b);
 
@@ -315,13 +328,13 @@ $(document).ready(function () {
             sumY += points[l].y;
             sumYTheta += points[l].y * theta_l;
         }
-        var leftMomentMatrix2 = new math.matrix([
+        var leftMomentMatrix2 = [
             [points.length, sumTheta],
             [sumTheta, sumThetaSquared]
-        ]);
-        leftMomentMatrix2 = math.inv(leftMomentMatrix2);
-        var rightMomentMatrix2 = math.matrix([sumY, sumYTheta]);
-        var Beta_solution = math.dot(leftMomentMatrix2, rightMomentMatrix2);
+        ];
+        leftMomentMatrix2 = numeric.inv(leftMomentMatrix2);
+        var rightMomentMatrix2 = [sumY, sumYTheta];
+        var Beta_solution = numeric.dot(leftMomentMatrix2, rightMomentMatrix2);
         var a2 = Beta_solution[0];
         var b2 = Beta_solution[1];
 
@@ -329,15 +342,15 @@ $(document).ready(function () {
         var predict_actual = [],
             predict = [],
             actual = [];
+        formulaStr += `${a2.toExponential(2).toString()} + ${b2.toExponential(2)}*exp(${c2.toExponential(2)}*x)`;
 
         //now we use the Beta coefficients to find the values of the y_model vector
         for (i = 0; i < X.length; i++) {
             var y_predict = a2 + b2 * Math.exp(c2 * X[i]);
-            formulaStr += `${a2.toExponential(2).toString()} + ${b2.toExponential(2)}*exp(${c2.toExponential(2)}*x)`;
 
             predict.push(y_predict);
             actual.push(Y[i]);
-            predict_actual.push(y_predict, Y[i]);
+            predict_actual.push([y_predict, Y[i]]);
         }
 
         var evaluationBeta = estimateCoefficientsWithOLS(predict, actual, 1);
@@ -359,27 +372,27 @@ $(document).ready(function () {
                 }
             }
         }
-
-        var minY = evaluationBeta[1] * minX + evaluationBeta[0];
-        var maxY = evaluationBeta[1] * maxX + evaluationBeta[0];
+        //need to wrap these in Number because I am finding that when one term is large or small enough to be in scientific notation, the e character seems to be resulting in creation of a string variable, not numeric.
+        var minY = Number(minX * evaluationBeta[1]) + Number(evaluationBeta[0]);
+        var maxY = Number(maxX * evaluationBeta[1]) + Number(evaluationBeta[0]);
         var lr = linearRegression(predict, actual);
 
         formulaStr += "<br>";
         formulaStr += `R2 = ${lr.r2.toFixed(3)}`;
         $("#formula").html(formulaStr);
 
-        Highcharts.chart("model_scatter_exponential", {
+        Highcharts.chart("model_metrics_exponential", {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy'
             },
             title: {
-                text: 'Data Plot'
+                text: 'Model Prediction Plot'
             },
             xAxis: {
                 title: {
                     enabled: true,
-                    text: 'X'
+                    text: 'Predicted Value'
                 },
                 startOnTick: true,
                 endOnTick: true,
@@ -387,7 +400,7 @@ $(document).ready(function () {
             },
             yAxis: {
                 title: {
-                    text: 'Y'
+                    text: 'True Value'
                 }
             },
             legend: {
@@ -449,5 +462,87 @@ $(document).ready(function () {
                     }
                 }]
         });
+
+        Highcharts.chart("model_scatter_exponential", {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Data Plot'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'X'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Y'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF",
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100, 100, 100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{series.name}</b>',
+                        pointFormat: '{point.x}, {point.y}'
+                    }
+                }
+            },
+            series: [
+                //{
+                //    type: 'line',
+                //    name: 'Regression Curve',
+                //    data: [[minX, minY], [maxX, maxY]],
+                //    marker: {
+                //        enabled: false
+                //    },
+                //    states: {
+                //        hover: {
+                //            lineWidth: 0
+                //        }
+                //    },
+                //    enableMouseTracking: false
+                //},
+                {
+                    type: 'scatter',
+                    name: 'Data Distribution',
+                    color: "rgba(223, 83, 83, 0.5)",
+                    data: data,
+                    marker: {
+                        radius: 4
+                    }
+                }]
+        });
     }
-});
+//});
